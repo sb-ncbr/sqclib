@@ -1,0 +1,15 @@
+[project]
+name = "sqclib"
+version = "0.1.0"
+description = "Library for interacting with the Structure Quality Check server"
+authors = [
+    {name = "Martin Jediny", email = "jedinym@proton.me"},
+]
+dependencies = []
+requires-python = ">=3.11"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
