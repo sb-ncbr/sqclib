@@ -63,7 +63,8 @@ class SQCClient:
         self._minio = minio.Minio(
             url,
             access_key=access_key,
-            secret_key=secret_key
+            secret_key=secret_key,
+            secure=False,
         )
 
     def submit(self, path: str | Path) -> Request:
