@@ -29,8 +29,8 @@ class Request:
                     self._id
                 )
 
-                if 'sqc-error' in obj.metadata:
-                    raise SQCException(obj.metadata['sqc-message'])
+                if err := obj.metadata.get('X-Amz-Meta-Sqc-Error'):
+                    raise SQCException(err)
 
                 break
             except S3Error as err:
