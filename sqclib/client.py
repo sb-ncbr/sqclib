@@ -17,16 +17,16 @@ class SQCException(Exception):
 
 
 class Request:
-    def __init__(self, minio: minio.Minio, id: str):
+    def __init__(self, minio: minio.Minio, request_id: str):
         self._minio = minio
-        self._id = id
+        self._request_id = request_id
 
     def wait_result(self, delay: int = 5) -> dict[str, Any]:
         while True:
             try:
                 obj = self._minio.stat_object(
                     result_bucket,
-                    self._id
+                    f"{self._request_id}.json"
                 )
 
                 if err := obj.metadata.get('X-Amz-Meta-Sqc-Error'):
@@ -44,10 +44,10 @@ class Request:
 
     def _get_result(self) -> dict[str, Any]:
         try:
-            path = mktemp(prefix=self._id)
+            path = mktemp(prefix=self._request_id)
             self._minio.fget_object(
                 result_bucket,
-                self._id,
+                self._request_id,
                 path
             )
 
