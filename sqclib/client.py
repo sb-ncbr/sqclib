@@ -21,12 +21,17 @@ class Request:
         self._minio = minio
         self._request_id = request_id
 
-    def wait_result(self, delay: int = 5) -> dict[str, Any]:
+    @property
+    def _result_name(self) -> str:
+        return f"{self._request_id}.json"
+
+
+    def wait_result(self, delay_s: int = 1) -> dict[str, Any]:
         while True:
             try:
                 obj = self._minio.stat_object(
                     result_bucket,
-                    f"{self._request_id}.json"
+                    self._result_name
                 )
 
                 if err := obj.metadata.get('X-Amz-Meta-Sqc-Error'):
@@ -35,7 +40,7 @@ class Request:
                 break
             except S3Error as err:
                 if err.code == "NoSuchKey":
-                    sleep(delay)
+                    sleep(delay_s)
                     continue
                 else:
                     raise SQCException("Error during result polling") from err
@@ -47,7 +52,7 @@ class Request:
             path = mktemp(prefix=self._request_id)
             self._minio.fget_object(
                 result_bucket,
-                self._request_id,
+                self._result_name,
                 path
             )
 
