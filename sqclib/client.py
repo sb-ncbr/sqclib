@@ -67,6 +67,16 @@ class SQCClient:
         )
 
     def submit(self, path: str | Path) -> Request:
-        id = str(uuid4())
+        request_id = str(uuid4())
 
-        return Request(self._minio, id)
+        try:
+            self._minio.fput_object(
+                request_bucket,
+                request_id,
+                path,
+            )
+
+        except S3Error as err:
+            raise SQCException("Error during requesting validation") from err
+
+        return Request(self._minio, request_id)
