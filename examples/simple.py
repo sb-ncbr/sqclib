@@ -1,17 +1,19 @@
+import os
 import sqclib
 
+access_key = os.environ.get("SQC_ACCESS_KEY")
+secret_key = os.environ.get("SQC_SECRET_KEY")
+
 sqc = sqclib.SQCClient(
-    "localhost:9000",
-    access_key="minioadmin",
-    secret_key="minioadmin"
+    "sqc-minio.dyn.cloud.e-infra.cz",
+    access_key=access_key,
+    secret_key=secret_key,
 )
 
 try:
-    req = sqc.submit('test.mmcif')
-    res = req.wait_result()
+    res = sqc.validate("test.mmcif")
     print(res)
 
 except sqclib.SQCException:
     print("Something went awry")
     raise
-
