@@ -39,6 +39,16 @@ class SQCClient:
         secret_key (str): Secret key provided by SQC administrators.
         secure (bool, optional): Use HTTPS for communication.
             `True` by default.
+
+    Examples:
+        >>> client = SQCClient(
+                'https://sqc-minio.dyn.cloud.e-infra.cz',
+                'access_key',
+                'secret_key',
+                secure=True,
+            )
+        >>> client.validate('./struct.mmcif')
+        {'results': 'ok'}
     """
 
     def __init__(self, url: str, access_key: str, secret_key: str, secure=True) -> None:
