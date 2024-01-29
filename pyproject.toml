@@ -11,6 +11,10 @@ dependencies = [
 requires-python = ">=3.11"
 license = {text = "MIT"}
 
+[project.optional-dependencies]
+doc = [
+    "sphinx>=7.2.6",
+]
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
