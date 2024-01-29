@@ -60,6 +60,11 @@ class SQCClient:
         Returns:
             A request id that can be used for getting results with the
             :func:`~sqclib.client.SQCClient.get_result` function.
+
+        Examples:
+            >>> validation_id = client.submit('./struct.mmcif')
+            >>> client.get_result(validation_id, timeout_s=60)
+            {'results': 'ok'}
         """
         request_id = str(uuid4())
 
@@ -93,6 +98,10 @@ class SQCClient:
         Returns:
             A dictionary containing the validation results or :obj:`None` if the
             validation timed out.
+
+        Examples:
+            >>> client.validate('./struct.mmcif', timeout_s=60)
+            {'results': 'ok'}
         """
         val_id = self.submit(path)
         return self.get_result(val_id, timeout_s)
@@ -112,6 +121,11 @@ class SQCClient:
         Returns:
             A dictionary containing the validation results or :obj:`None` if the
             validation timed out.
+
+        Examples:
+            >>> validation_id = client.submit('./struct.mmcif')
+            >>> client.get_result(validation_id, timeout_s=60)
+            {'results': 'ok'}
         """
         # TODO: add timeout
         request_name = f"{request_id}.json"
