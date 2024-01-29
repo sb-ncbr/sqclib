@@ -3,7 +3,8 @@ This module contains the client used for communicating with the SQC validation
 server.
 """
 from pathlib import Path
-from tempfile import mkstemp, mktemp
+from tempfile import mkstemp
+import os
 import json
 from typing import Any
 from time import sleep
@@ -149,12 +150,15 @@ class SQCClient:
 
     def _get_result(self, result_name: str) -> dict[str, Any]:
         try:
-            # FIXME: don't use mktemp
-            path = mktemp(prefix=result_name)
+            fd, path = mkstemp(prefix=result_name)
             self._minio.fget_object(result_bucket, result_name, path)
 
-            with open(path, "r") as tmpf:
-                return json.load(tmpf)
+            try:
+                with open(path, "r") as tmpf:
+                    return json.load(tmpf)
+            finally:
+                os.close(fd)
+                os.unlink(path)
 
         except S3Error as err:
             raise SQCException("Error during result acquisition") from err
