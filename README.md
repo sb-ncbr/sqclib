@@ -2,7 +2,7 @@
 
 Sqclib is a small python library used for interacting with the
 [SQC](https://github.com/sb-ncbr/sqc) validation server. You can find the
-documentation for the latest version [here](https://sb-ncbr.github.io/sqclib/)
+documentation for the latest version [here](https://sb-ncbr.github.io/sqclib/).
 
 ## Installation
 
