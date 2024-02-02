@@ -21,6 +21,8 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
+      - name: Install sphinx
+        run: sudo apt-get install sphinx
       - name: Checkout
         uses: actions/checkout@v4
       - name: Build docs
