@@ -61,8 +61,9 @@ class SQCClient:
 
     def submit(self, path: str | Path) -> str:
         """
-        Submit a `.mmcif` file for validation asynchronously. Returns an ID of
-        the submitted validation.
+        Submit a `.mmcif`, `.cif`, `.ent` or `.pdb` file for validation
+        asynchronously.
+        Returns an ID of the submitted validation.
 
         Args:
             path (str, :obj:`Path`): A string or a Path object of the
@@ -78,12 +79,21 @@ class SQCClient:
             {'results': 'ok'}
         """
         request_id = str(uuid4())
+        ftype = str(path).split('.')[-1]
+        if ftype not in {'mmcif', 'cif', 'ent', 'pdb'}:
+            raise SQCException("The file type extension is not valid")
+
+        if ftype == 'cif':
+            ftype = 'mmcif'
+        elif ftype == 'ent':
+            ftype = 'pdb'
 
         try:
             self._minio.fput_object(
                 request_bucket,
                 request_id,
                 str(path),
+                metadata={'ftype': ftype}
             )
 
         except S3Error as err:
@@ -95,10 +105,10 @@ class SQCClient:
         self, path: str | Path, timeout_s: int | None = None
     ) -> dict[str, Any] | None:
         """
-        Validate a `.mmcif` file. This function blocks until the submitted file
-        is validated. If you want to validate more structures, consider using
-        the :func:`~sqclib.client.SQCClient.submit` and
-        :func:`~sqclib.client.SQCClient.get_result` functions.
+        Validate a `.mmcif`, '.cif', `.ent` or `.pdb` file. This function blocks
+        until the submitted file is validated. If you want to validate more
+        structures, consider using the :func:`~sqclib.client.SQCClient.submit`
+        and :func:`~sqclib.client.SQCClient.get_result` functions.
 
         Args:
             path (str, :obj:`Path`): A string or a Path object of the
