@@ -79,21 +79,18 @@ class SQCClient:
             {'results': 'ok'}
         """
         request_id = str(uuid4())
-        ftype = str(path).split('.')[-1]
-        if ftype not in {'mmcif', 'cif', 'ent', 'pdb'}:
+        ftype = str(path).split(".")[-1]
+        if ftype not in {"mmcif", "cif", "ent", "pdb"}:
             raise SQCException("The file type extension is not valid")
 
-        if ftype == 'cif':
-            ftype = 'mmcif'
-        elif ftype == 'ent':
-            ftype = 'pdb'
+        if ftype == "cif":
+            ftype = "mmcif"
+        elif ftype == "ent":
+            ftype = "pdb"
 
         try:
             self._minio.fput_object(
-                request_bucket,
-                request_id,
-                str(path),
-                metadata={'ftype': ftype}
+                request_bucket, request_id, str(path), metadata={"ftype": ftype}
             )
 
         except S3Error as err:
