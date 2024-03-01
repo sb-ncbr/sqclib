@@ -1,4 +1,5 @@
 import argparse as ap
+import json
 import os
 from sys import stderr
 
@@ -21,7 +22,7 @@ def sqc_submit(sqc_url: str, path: str) -> None:
     )
 
     res = sqc.validate(path)
-    print(res)
+    print(json.dumps(res))
 
 
 def main_cli():
