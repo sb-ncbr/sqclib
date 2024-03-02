@@ -13,6 +13,8 @@ get a JSON response. To use the client, the environment variables
    $ sqc submit structure.mmcif
    $ sqc submit structure.pdb
 
+For more options, use the ``--help`` switch.
+
 Python library API
 ----------
 .. automodule:: sqclib.client
