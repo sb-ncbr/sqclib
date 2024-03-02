@@ -6,7 +6,7 @@ from sys import stderr
 import sqclib
 
 
-def sqc_submit(sqc_url: str, path: str) -> None:
+def sqc_submit(sqc_url: str, path: str, insecure: bool) -> None:
     access_key = os.environ.get("SQC_ACCESS_KEY")
     if not access_key:
         print("The SQC_ACCESS_KEY environment variable is undefined", file=stderr)
@@ -18,7 +18,7 @@ def sqc_submit(sqc_url: str, path: str) -> None:
         exit(1)
 
     sqc = sqclib.SQCClient(
-        sqc_url, access_key=access_key, secret_key=secret_key, secure=False
+        sqc_url, access_key=access_key, secret_key=secret_key, secure=not insecure
     )
 
     res = sqc.validate(path)
@@ -28,8 +28,16 @@ def sqc_submit(sqc_url: str, path: str) -> None:
 def main_cli():
     parser = ap.ArgumentParser()
     parser.add_argument("path", help="path to the MMCIF/PDB/ENT file to submit to SQC")
-    parser.add_argument("-u", "--url", default="https://sqc-minio.dyn.cloud.e-infra.cz")
+    parser.add_argument("-u", "--url", default="sqc-minio.dyn.cloud.e-infra.cz")
+    parser.add_argument(
+        "-k",
+        "--insecure",
+        default=False,
+        action="store_const",
+        const=True,
+        help="Allow insecure connection",
+    )
 
     args = parser.parse_args()
 
-    sqc_submit(args.url, args.path)
+    sqc_submit(args.url, args.path, args.insecure)
