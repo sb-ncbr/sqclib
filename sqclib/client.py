@@ -99,7 +99,7 @@ class SQCClient:
         return request_id
 
     def validate(
-        self, path: str | Path, timeout_s: int | None = None
+        self, path: str | Path, timeout_s: float = 0.0
     ) -> dict[str, Any] | None:
         """
         Validate a `.mmcif`, '.cif', `.ent` or `.pdb` file. This function blocks
@@ -110,7 +110,7 @@ class SQCClient:
         Args:
             path (str, :obj:`Path`): A string or a Path object of the
                 file to be submitted.
-            timeout_s (int, optional): Timeout for waiting in seconds. No
+            timeout_s (float, optional): Timeout for waiting in seconds. No
                 timeout by default.
 
         Returns:
@@ -125,7 +125,7 @@ class SQCClient:
         return self.get_result(val_id, timeout_s)
 
     def get_result(
-        self, request_id: str, timeout_s: int | None = None
+        self, request_id: str, timeout_s: float = 0.0
     ) -> dict[str, Any] | None:
         """
         Get a validation result from a request ID.
@@ -133,7 +133,7 @@ class SQCClient:
         Args:
             request_id (str): A valid request ID returned from
                 :func:`~sqclib.client.SQCClient.submit`
-            timeout_s (int, optional): Timeout for waiting in seconds. No
+            timeout_s (float, optional): Timeout for waiting in seconds. No
                 timeout by default.
 
         Returns:
@@ -145,7 +145,7 @@ class SQCClient:
             >>> client.get_result(validation_id, timeout_s=60)
             {'results': 'ok'}
         """
-        # TODO: add timeout
+        elapsed = 0
         request_name = f"{request_id}.json"
         delay_s = 1
         while True:
@@ -159,6 +159,11 @@ class SQCClient:
             except S3Error as err:
                 if err.code == "NoSuchKey":
                     sleep(delay_s)
+                    elapsed += delay_s
+
+                    if timeout_s != 0 and elapsed >= timeout_s:
+                        return None
+
                     continue
                 else:
                     raise SQCException("Error during result polling") from err
