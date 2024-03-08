@@ -10,8 +10,8 @@ get a JSON response. To use the client, the environment variables
 
 .. code-block::
 
-   $ sqc submit structure.mmcif
-   $ sqc submit structure.pdb
+   $ sqc structure.mmcif
+   $ sqc structure.pdb
 
 For more options, use the ``--help`` switch.
 
