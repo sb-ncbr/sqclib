@@ -2,6 +2,7 @@
 This module contains the client used for communicating with the SQC validation
 server.
 """
+
 from pathlib import Path
 from tempfile import mkstemp
 import os
@@ -80,6 +81,7 @@ class SQCClient:
         """
         request_id = str(uuid4())
         ftype = str(path).split(".")[-1]
+        filename = os.path.basename(path)
         if ftype not in {"mmcif", "cif", "ent", "pdb"}:
             raise SQCException("The file type extension is not valid")
 
@@ -90,7 +92,10 @@ class SQCClient:
 
         try:
             self._minio.fput_object(
-                request_bucket, request_id, str(path), metadata={"ftype": ftype}
+                request_bucket,
+                request_id,
+                str(path),
+                metadata={"ftype": ftype, "filename": filename},
             )
 
         except S3Error as err:
