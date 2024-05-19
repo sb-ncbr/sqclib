@@ -35,24 +35,30 @@ class SQCClient:
     Client used for communication with the SQC server.
 
     Args:
-        url (str): URL of the minio server
         access_key (str): Access key provided by SQC administrators.
         secret_key (str): Secret key provided by SQC administrators.
+        url (str, optional): URL of the minio server. Public MetaCentrum instance by default.
         secure (bool, optional): Use HTTPS for communication.
             `True` by default.
 
     Examples:
         >>> client = SQCClient(
-                'https://sqc-minio.dyn.cloud.e-infra.cz',
                 'access_key',
                 'secret_key',
+                url='https://sqc-minio.dyn.cloud.e-infra.cz',
                 secure=True,
             )
         >>> client.validate('./struct.mmcif')
         {'results': 'ok'}
     """
 
-    def __init__(self, url: str, access_key: str, secret_key: str, secure=True) -> None:
+    def __init__(
+        self,
+        access_key: str,
+        secret_key: str,
+        url: str = "https://sqc-minio.dyn.cloud.e-infra.cz",
+        secure=True,
+    ) -> None:
         self._minio = minio.Minio(
             url,
             access_key=access_key,
