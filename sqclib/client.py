@@ -45,7 +45,7 @@ class SQCClient:
         >>> client = SQCClient(
                 'access_key',
                 'secret_key',
-                url='https://sqc-minio.dyn.cloud.e-infra.cz',
+                url='sqc-minio.dyn.cloud.e-infra.cz',
                 secure=True,
             )
         >>> client.validate('./struct.mmcif')
@@ -56,7 +56,7 @@ class SQCClient:
         self,
         access_key: str,
         secret_key: str,
-        url: str = "https://sqc-minio.dyn.cloud.e-infra.cz",
+        url: str = "sqc-minio.dyn.cloud.e-infra.cz",
         secure=True,
     ) -> None:
         self._minio = minio.Minio(
