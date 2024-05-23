@@ -19,7 +19,7 @@ def sqc_submit(sqc_url: str, path: str, insecure: bool, timeout: float) -> None:
         sys.exit(1)
 
     sqc = sqclib.SQCClient(
-        sqc_url, access_key=access_key, secret_key=secret_key, secure=not insecure
+        access_key, secret_key, url=sqc_url, secure=not insecure
     )
 
     res = sqc.validate(path, timeout)
