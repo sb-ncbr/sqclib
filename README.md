@@ -12,5 +12,5 @@ github organization. It is recommended to create a virtual environment first.
 ``` sh
 $ python -m venv venv
 $ source venv/bin/activate
-$ python -m pip install git@github.com:sb-ncbr/sqclib.git
+$ python -m pip install git+https://github.com/sb-ncbr/sqclib.git
 ```
